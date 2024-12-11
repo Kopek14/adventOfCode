@@ -9,16 +9,34 @@ for line in lines:
         numbers[i] = int(number)
     twoDArray.append(numbers)
         
+def increasing(array):
+    return all(i == 0 or num > array[i - 1] and num - array[i - 1] < 4  for i, num in enumerate(array))
+
+def decreasing(array):
+     return all(i == 0 or num < array[i - 1] and array[i - 1] - num < 4 for i, num in enumerate(array))
 
 def checkResults(twoDArray):
     safeResults = 0
+    
     for array in twoDArray:
         positive = (
-            all(i == 0 or num > array[i - 1] and num - array[i - 1] < 4  for i, num in enumerate(array)) or
-            all(i == 0 or num < array[i - 1] and array[i - 1] - num < 4 for i, num in enumerate(array))
+            increasing(array) or
+            decreasing(array)
         )
         if(positive):
             safeResults += 1
     return safeResults
 
 print("Solution part 1: ", checkResults(twoDArray))
+
+def cut(array, i):
+    return array[0: i] + array[i + 1: len(array)]
+
+def everyButOne(arr, f):
+    if(f(arr)):
+        return True
+    return any(f(cut(arr, i)) for i, num in enumerate(arr))
+
+resultPart2 =  len(list(filter(bool, map(lambda row: everyButOne(row, decreasing) or everyButOne(row, increasing), twoDArray))))
+
+print("resultPart2: ", resultPart2)
