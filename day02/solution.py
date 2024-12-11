@@ -1,6 +1,5 @@
 with open("numbers.txt") as file:
     lines = file.readlines()
-print(len(lines))
 
 twoDArray = []
 
@@ -9,27 +8,17 @@ for line in lines:
     for i, number in enumerate(numbers):
         numbers[i] = int(number)
     twoDArray.append(numbers)
-
-safeReports = 0
-
-for array in twoDArray:
-    iOrD = 'i'
-    safe = True
-    for i, number in enumerate(array):
-        if(i == 0):
-            continue
-        if(i == 1 and array[i - 1] > number):
-            iOrD = 'd'
-        if(iOrD == 'i' and array[i - 1] >= number):
-            safe = False
-            break
-        if(iOrD == 'd' and array[i - 1] <= number):
-            safe = False
-            break
-        if(abs(array[i - 1] - number) > 3):
-            safe = False
-            break
-    if(safe == True):
-        safeReports += 1 
         
-print(f'safeReports: {safeReports}')
+
+def checkResults(twoDArray):
+    safeResults = 0
+    for array in twoDArray:
+        positive = (
+            all(i == 0 or num > array[i - 1] and num - array[i - 1] < 4  for i, num in enumerate(array)) or
+            all(i == 0 or num < array[i - 1] and array[i - 1] - num < 4 for i, num in enumerate(array))
+        )
+        if(positive):
+            safeResults += 1
+    return safeResults
+
+print("Solution part 1: ", checkResults(twoDArray))
